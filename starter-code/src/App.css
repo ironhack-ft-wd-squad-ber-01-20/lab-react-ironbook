@@ -1,0 +1,9 @@
+input {
+  width: 38em;
+  padding: 0.5em;
+  margin-left: 3em;
+}
+
+.checkbox {
+  width: auto;
+}
