@@ -1,0 +1,5 @@
+li {
+  width: 40rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
