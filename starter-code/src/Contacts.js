@@ -3,33 +3,77 @@ import users from "./users";
 
 class Contacts extends Component {
   state = {
-    contactList: users,
     search: "",
+    studentCheck: true,
+    teacherCheck: true,
+    campusSelect: "",
   };
 
   handleSearchChange = (event) => {
-
-
     this.setState({
-      contactList: users.filter(
-        contact =>
-          contact.firstName
-            .toLowerCase()
-            .includes(event.target.value.toLowerCase()) ||
-          contact.lastName
-            .toLowerCase()
-            .includes(event.target.value.toLowerCase())
-      ),
       search: event.target.value,
     });
-    console.log(event.target.value)
-    console.log(this.state.search) //Question: why is this line delayed by one event from the one above it?
+  };
 
+  handleStudentCheck = (event) => {
+    this.setState({
+      studentCheck: event.target.checked,
+    });
+  };
+
+  handleTeacherCheck = (event) => {
+    this.setState({
+      teacherCheck: event.target.checked,
+    });
+  };
+
+  handleCampusSelect = (event) => {
+    this.setState({
+      campusSelect: event.target.value,
+    });
   };
 
   render() {
-    const userList = this.state.contactList.map((user) => {
-      const { firstName, lastName, campus, id, role, linkedin } = user;
+    const searchFilter = (contact) =>
+      contact.firstName
+        .toLowerCase()
+        .includes(this.state.search.toLowerCase()) ||
+      contact.lastName.toLowerCase().includes(this.state.search.toLowerCase());
+
+    const isStudent = (contact) => {
+      if (this.state.studentCheck) {
+        return contact.role === "student";
+      } else return false;
+    };
+
+    const isTeacher = (contact) => {
+      if (this.state.teacherCheck) {
+        return contact.role === "teacher";
+      } else return false;
+    };
+
+    const campusSelect = (contact) => {
+      return contact.campus.includes(this.state.campusSelect);
+    };
+
+    const filtered = users.filter(
+      (contact) =>
+        searchFilter(contact) &&
+        campusSelect(contact) &&
+        (isStudent(contact) || isTeacher(contact))
+    );
+
+    const campusList = [];
+    const selectList = users.map((user) => {
+      if (!campusList.includes(user.campus)) {
+        campusList.push(user.campus);
+
+        return <option value={user.campus}>{user.campus}</option>;
+      } else return false;
+    });
+
+    const userList = filtered.map((user) => {
+      let { firstName, lastName, campus, id, role, linkedin } = user;
       return (
         <tr key={id}>
           <td>{firstName}</td>
@@ -46,6 +90,7 @@ class Contacts extends Component {
         </tr>
       );
     });
+
     return (
       <>
         <div className="App">
@@ -59,6 +104,34 @@ class Contacts extends Component {
               onChange={this.handleSearchChange}
             />
           </form>
+          <input
+            type="checkbox"
+            name="student"
+            id="student"
+            checked={this.state.studentCheck}
+            onChange={this.handleStudentCheck}
+          />
+          <label htmlFor="student">Student</label>
+          <input
+            type="checkbox"
+            name="teacher"
+            id="teacher"
+            checked={this.state.teacherCheck}
+            onChange={this.handleTeacherCheck}
+          />
+          <label htmlFor="teacher">Teacher</label>
+
+          <select id="campus" onChange={this.handleCampusSelect}>
+            <option value="">All</option>
+            {/*    <option value="Berlin">Berlin</option>
+            <option value="Paris">Paris</option>
+            <option value="Lisbon">Lisbon</option> */}
+
+            {selectList}
+          </select>
+
+          <label htmlFor="campus">Campus</label>
+
           <table>
             <thead>
               <tr>

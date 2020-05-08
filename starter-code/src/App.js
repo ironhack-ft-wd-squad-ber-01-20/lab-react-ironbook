@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import users from "./users";
 import "./App.css";
 import Contacts from "./Contacts";
 
