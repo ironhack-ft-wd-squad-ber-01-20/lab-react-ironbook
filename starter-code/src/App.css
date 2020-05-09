@@ -1,0 +1,27 @@
+.table-container {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  background-color: #282c34;
+  color: white;
+  text-align: center;
+  font-size: 54px;
+}
+
+table {
+  margin: 4vh;
+  height: auto;
+}
+
+th {
+  font-size: 36px;
+  padding: 3vh;
+}
+
+td {
+  width: 20vh;
+  font-size: 24px;
+}
