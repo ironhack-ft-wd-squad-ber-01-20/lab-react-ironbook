@@ -3,17 +3,6 @@ import users from "../users";
 import linkedin from "../linkedin.png";
 
 class User extends Component {
-  state = {
-    users: users,
-    search: "",
-  };
-
-  handleChange = (event) => {
-    this.setState({
-      search: event.target.value,
-    });
-  };
-
   //   handleSubmit = (event) => {
   //     event.preventDefault();
   //     const { search } = this.state;
@@ -27,13 +16,36 @@ class User extends Component {
   //   };
 
   render() {
-    console.log(this.state.users);
-
-    const usersMap = this.state.users
+    const usersMap = this.props.users
+      //   .filter((user) => {
+      //     return user.campus === this.props.campus;
+      //   })
       .filter((user) => {
-        return user.lastName
-          .toLowerCase()
-          .includes(this.state.search.toLowerCase());
+        if (this.props.teacher && this.props.student) {
+          return true;
+        } else if (this.props.teacher) {
+          return user.role === "teacher";
+          //return (user.role ===teacher
+        } else if (this.props.student) {
+          return user.role === "student";
+        }
+
+        return true;
+      })
+      .filter((user) => {
+        console.log(this.props.campus);
+
+        if (this.props.campus === "All") return true;
+        return user.campus === this.props.campus;
+      })
+
+      .filter((user) => {
+        return (
+          user.lastName
+            .toLowerCase()
+            .includes(this.props.search.toLowerCase()) ||
+          user.firstName.toLowerCase().includes(this.props.search.toLowerCase())
+        );
       })
       .map((user) => (
         <ul key={user.id} className="user-list">
@@ -50,16 +62,6 @@ class User extends Component {
       ));
     return (
       <Fragment>
-        <form>
-          <label htmlFor="search"></label>
-        </form>
-        <input
-          type="text"
-          id="search"
-          name="search"
-          value={this.state.search}
-          onChange={this.handleChange}
-        />
         <ul style={{ fontWeight: "900" }} className="user-list">
           <li>First Name</li>
           <li>Last Name</li>
