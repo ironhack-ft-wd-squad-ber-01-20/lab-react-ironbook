@@ -110,9 +110,9 @@ class App extends Component {
           <label htmlFor="teacher">Teacher</label>
           
         <select id="campus">
-        <option value="volvo">Berlin</option>
-        <option value="saab">Lisbon</option>
-        <option value="opel">Paris</option>
+        <option value="berlin">Berlin</option>
+        <option value="Lisbon">Lisbon</option>
+        <option value="Paris">Paris</option>
         </select>
         </form>
       
