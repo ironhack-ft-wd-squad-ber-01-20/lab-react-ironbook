@@ -8,10 +8,12 @@ class App extends Component {
     super()
     this.state = {
       users: users,
-      search: ''
+      search: '',
+      student: false,
+      teacher: false
     }
   }
-  
+
 
   handleNameChange = event => {
     console.log(event.target.value)
@@ -20,13 +22,28 @@ class App extends Component {
     })
   }
 
+  handleChange = event => {
+    const target = event.target;
+    const name = target.name;
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    this.setState({
+      [name]: value
+    })
+  }
+
   render() {
     const filterUser = this.state.users.filter((name) => {
-      if(this.handleNameChange) {
-        return (
-          name.firstName.toLowerCase().includes(this.state.search.toLowerCase()) ||
-          name.lastName.toLowerCase().includes(this.state.search.toLowerCase())
-        );
+      if (this.handleNameChange) {
+        if (this.state.student && !this.state.teacher) {
+          return (name.firstName.toLowerCase().includes(this.state.search.toLowerCase()) || name.lastName.toLowerCase().includes(this.state.search.toLowerCase())) && name.role === 'student'
+        } else if (this.state.teacher && !this.state.student) {
+          return (name.firstName.toLowerCase().includes(this.state.search.toLowerCase()) || name.lastName.toLowerCase().includes(this.state.search.toLowerCase())) && name.role === 'teacher'
+        } else {
+          return name.firstName.toLowerCase().includes(this.state.search.toLowerCase()) || name.lastName.toLowerCase().includes(this.state.search.toLowerCase())
+        }
+        // return (
+        //   (name.firstName.toLowerCase().includes(this.state.search.toLowerCase()) || name.lastName.toLowerCase().includes(this.state.search.toLowerCase()))  
+        // );
       }
     })
     return (
@@ -42,6 +59,23 @@ class App extends Component {
             value={this.state.search}
             onChange={this.handleNameChange}
           />
+          <label htmlFor="student">Student </label>
+          <input
+            type="checkbox"
+            name="student"
+            id="student"
+            checked={this.state.student}
+            onChange={this.handleChange}
+          />
+          <label htmlFor="teacher">Teacher </label>
+          <input
+            type="checkbox"
+            name="teacher"
+            id="teacher"
+            checked={this.state.teacher}
+            onChange={this.handleChange}
+          />
+
         </form>
 
 
