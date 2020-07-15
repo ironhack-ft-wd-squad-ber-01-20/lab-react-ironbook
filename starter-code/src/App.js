@@ -10,8 +10,7 @@ class App extends React.Component {
   }
 
   filterNames = (arr, query) => {
-    console.log(arr);
-    return users.filter(item => item.firstName.toLowerCase().includes(query.toLowerCase()))
+    return users.filter(item => item.firstName.toLowerCase().includes(query.toLowerCase()) || item.lastName.toLowerCase().includes(query.toLowerCase()))
   }
 
   handleChange = (event) => {
