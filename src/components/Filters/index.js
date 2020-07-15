@@ -1,12 +1,12 @@
 import React from 'react';
 import './style.css'
 
-export default function index({ fnClick, fnChange, title = "", checked = false }) {
+export default function index({ fnChange, title = "", checked = false }) {
     return (
         <div className="filters-bar">
             <label>
                 <input
-                    onChange={e => fnClick(e.target.checked)}
+                    onChange={e => fnChange(e.target.checked)}
                     type="checkbox"
                     checked={checked}
                 />

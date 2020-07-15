@@ -18,13 +18,13 @@ function App() {
   useEffect(() => {
     if (isStudent && !isTeacher) {
       let listStudents = userList.filter(contact => contact.role.includes('student'))
-      return setShowUsers(listStudents)
+      return setUserList(listStudents)
     }
     if (isTeacher && !isStudent) {
       let listTeachers = userList.filter(contact => contact.role.includes('teacher'))
-      return setShowUsers(listTeachers)
+      return setUserList(listTeachers)
     }
-    return setShowUsers(userList)
+    return setUserList(users)
 
   }, [isStudent, isTeacher])
 
@@ -41,10 +41,10 @@ function App() {
       <h1>Ironbook</h1>
       <SearchBar handlerOnchange={findContactByName} />
       <Filters title="Student"
-        fnClick={() => setIsStudent(!isStudent)}
+        fnChange={() => setIsStudent(!isStudent)}
         checked={isStudent} />
       <Filters title="Teacher"
-        fnClick={() => setIsTeacher(!isTeacher)}
+        fnChange={() => setIsTeacher(!isTeacher)}
         checked={isTeacher} />
       <Users users={showUsers} />
     </div>
