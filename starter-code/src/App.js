@@ -32,7 +32,7 @@ class App extends Component {
                 <td>{e.lastName}</td>
                 <td>{e.campus}</td>
                 <td>{e.role}</td>
-                <td>{e.linkedin}</td>
+                <td><a href={e.linkedin}>{e.linkedin}</a></td>
               </tr>
             )}
           </tbody>
