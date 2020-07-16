@@ -22,7 +22,7 @@ class App extends React.Component {
   }
 
   filterOptions = (campus) => {
-    return users.filter(user => user.campus === campus);
+    return users.filter(user => user.campus === campus || campus === '');
   }
 
   handleChange = (event) => {
@@ -95,7 +95,7 @@ class App extends React.Component {
             onChange={this.filterCheckbox}
           />
           <select name="country" id="country" onChange={this.optionsChange}>
-  <option value="country">country</option>
+  <option value="">country</option>
   { countries }
 
           </select>
