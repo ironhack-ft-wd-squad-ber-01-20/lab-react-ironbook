@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 import users from "./users";
 import './App.css';
+import TableHead from './components/TableHead';
+import TableBody from './components/TableBody';
 
 class App extends Component {
   constructor() {
@@ -13,7 +15,6 @@ class App extends Component {
       teacher: false
     }
   }
-
 
   handleNameChange = event => {
     console.log(event.target.value)
@@ -32,20 +33,7 @@ class App extends Component {
   }
 
   render() {
-    const filterUser = this.state.users.filter((name) => {
-      if (this.handleNameChange) {
-        if (this.state.student && !this.state.teacher) {
-          return (name.firstName.toLowerCase().includes(this.state.search.toLowerCase()) || name.lastName.toLowerCase().includes(this.state.search.toLowerCase())) && name.role === 'student'
-        } else if (this.state.teacher && !this.state.student) {
-          return (name.firstName.toLowerCase().includes(this.state.search.toLowerCase()) || name.lastName.toLowerCase().includes(this.state.search.toLowerCase())) && name.role === 'teacher'
-        } else {
-          return name.firstName.toLowerCase().includes(this.state.search.toLowerCase()) || name.lastName.toLowerCase().includes(this.state.search.toLowerCase())
-        }
-        // return (
-        //   (name.firstName.toLowerCase().includes(this.state.search.toLowerCase()) || name.lastName.toLowerCase().includes(this.state.search.toLowerCase()))  
-        // );
-      }
-    })
+
     return (
       <div className="App">
         <h1>IronBook</h1>
@@ -78,29 +66,9 @@ class App extends Component {
 
         </form>
 
-
         <table>
-          <thead>
-            <tr>
-              <td>First Name</td>
-              <td>Last Name</td>
-              <td>Campus</td>
-              <td>Role</td>
-              <td>Links</td>
-            </tr>
-          </thead>
-
-          <tbody>
-            {filterUser.map(e =>
-              <tr key={e.id}>
-                <td>{e.firstName}</td>
-                <td>{e.lastName}</td>
-                <td>{e.campus}</td>
-                <td>{e.role}</td>
-                <td><a href={e.linkedin}>{e.linkedin}</a></td>
-              </tr>
-            )}
-          </tbody>
+          <TableHead />
+          <TableBody users={this.state.users} search={this.state.search} handleNameChange={this.handleNameChange} />
         </table>
       </div>
     );
