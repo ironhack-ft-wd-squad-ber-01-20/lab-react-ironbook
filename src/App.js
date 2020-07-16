@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar'
-import Filters from './components/Filters'
+import FiltersCheckbox from './components/FiltersCheckbox'
+import FilterSelect from './components/FilterSelect'
 import Users from './components/Users'
 import users from './Data/users.json'
 import './App.css';
@@ -10,27 +11,54 @@ function App() {
   const [showUsers, setShowUsers] = useState([])
   const [isStudent, setIsStudent] = useState(false)
   const [isTeacher, setIsTeacher] = useState(false)
+  const [campusList, setCampusList] = useState(false)
+  const [inputText, setInputText] = useState('')
+  const [setectedCampus, setSetectedCampus] = useState('')
+
+
 
   useEffect(() => {
     setShowUsers(userList)
-  }, [userList])
+  }, [userList, isTeacher, isStudent])
+
+  useEffect(() => {
+    setCampusList(createCampusListFromShowUsers())
+  }, [showUsers])
+
+  useEffect(() => {
+    findContactByName()
+  }, [inputText, isTeacher, isStudent])
 
   useEffect(() => {
     if (isStudent && !isTeacher) {
-      let listStudents = userList.filter(contact => contact.role.includes('student'))
+      let listStudents = showUsers.filter(contact => contact.role.includes('student') && contact.firstName.includes(inputText))
       return setUserList(listStudents)
     }
     if (isTeacher && !isStudent) {
-      let listTeachers = userList.filter(contact => contact.role.includes('teacher'))
+      let listTeachers = showUsers.filter(contact => contact.role.includes('teacher') && contact.firstName.includes(inputText))
       return setUserList(listTeachers)
     }
-    return setUserList(users)
+    if (inputText.length <= 0) {
+      setUserList(users)
+    }
+    return setUserList(users.filter(user => user.role.includes(inputText)))
 
   }, [isStudent, isTeacher])
 
-  const findContactByName = (event) => {
-    event.preventDefault()
-    const result = userList.filter(contact => contact.firstName.toLowerCase().includes(event.target.value.toLowerCase()))
+  const createCampusListFromShowUsers = () => {
+    return [... new Set(userList.map(({ campus }) => campus))]
+  }
+
+  const filterByCampus = (event) => {
+    const result = userList.filter(({ campus }) => event.target.value != 'all' ? campus === event.target.value : campus)
+    return setShowUsers(result)
+  }
+
+  const findContactByName = () => {
+    if (inputText.length === 0) {
+      return
+    }
+    const result = userList.filter(contact => contact.firstName.toLowerCase().includes(inputText.toLowerCase()))
     if (result) {
       return setShowUsers(result)
     }
@@ -39,13 +67,14 @@ function App() {
   return (
     <div className="App">
       <h1>Ironbook</h1>
-      <SearchBar handlerOnchange={findContactByName} />
-      <Filters title="Student"
+      <SearchBar handlerOnchange={(event) => setInputText(event.target.value)} />
+      <FiltersCheckbox title="Student"
         fnChange={() => setIsStudent(!isStudent)}
         checked={isStudent} />
-      <Filters title="Teacher"
+      <FiltersCheckbox title="Teacher"
         fnChange={() => setIsTeacher(!isTeacher)}
         checked={isTeacher} />
+      <FilterSelect title="Campus" options={campusList} handlerOnchange={filterByCampus} />
       <Users users={showUsers} />
     </div>
   );
