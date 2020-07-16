@@ -14,23 +14,27 @@ class App extends Component {
   }
 
   handleChange = event => {
-    //console.log(event.target.value)
+    console.log(event.target.value)
     this.setState({search: event.target.value})
     console.log(this.state.search)
   }
 
   render() {
-    let arr = this.state.users.filter((person) => {
+    let filteredUsers = this.state.users.filter((person) => {
       if (this.state.search ==="") {
         return users;
       } else if (
-        person.firstName === this.state.search || person.lastName ===this.state.search
+        person.firstName.toLowerCase().includes(this.state.search)  || 
+        person.lastName.toLowerCase().includes(this.state.search)
+
+        //could also work to just find input
+        //person.firstName === this.state.search) instead of person.firstName.toLowerCase().includes(this.state.search) dynamically updating for search input
       ) {
         return person;
       }
     });
     const userList =
-      users.map(user => {
+    filteredUsers.map((user) => {
          const {firstName, lastName, campus, role, linkedin} =user;
         return(
         <>
@@ -53,12 +57,14 @@ class App extends Component {
         <h1>Iron Book</h1>
         <form >
         <input
+        id="search"
         type="text"
-        name="Search"
+        name="search"
         value= {this.state.search}
         onChange={this.handleChange}
         />
       </form>
+      
 
         <table>
           <thead>
