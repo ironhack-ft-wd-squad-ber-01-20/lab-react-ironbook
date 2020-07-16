@@ -6,19 +6,34 @@ import './App.css';
 class App extends React.Component {
   state = {
     data: users,
-    query: ''
+    query: '',
+    teacher: false,
+    student: false
   }
 
   filterNames = (arr, query) => {
     return users.filter(item => item.firstName.toLowerCase().includes(query.toLowerCase()) || item.lastName.toLowerCase().includes(query.toLowerCase()))
   }
 
+  filterRoles = (checked, name) => {
+    if(checked) return users.filter(user => user.role.toLowerCase() == name);
+    return users
+  }
+
   handleChange = (event) => {
-    const value = event.target.value;
     this.setState(state => ({
-      query: value,
-      data: this.filterNames(state.data, value)
+      query: event.target.value,
+      data: this.filterNames(state.data, event.target.value)
     }))
+  }
+
+  filterCheckbox = (event) => {
+    const name = event.target.name;
+    const checked = event.target.checked;
+    this.setState(state => ({
+      [name]: !state[name],
+      data: this.filterRoles(checked, name)
+     }))
   }
 
   render() {
@@ -44,6 +59,22 @@ class App extends React.Component {
             id="search"
             value={this.state.query}
             onChange={this.handleChange}
+          />
+          <label htmlFor="teacher">Teacher</label>
+          <input
+            type="checkbox"
+            name="teacher"
+            id="teacher"
+            checked={this.state.teacher}
+            onChange={this.filterCheckbox}
+          />
+          <label htmlFor="student">Student</label>
+          <input
+            type="checkbox"
+            name="student"
+            id="student"
+            checked={this.state.student}
+            onChange={this.filterCheckbox}
           />
           <table>
             <thead>
