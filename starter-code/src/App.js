@@ -8,7 +8,8 @@ class App extends React.Component {
     data: users,
     query: '',
     teacher: false,
-    student: false
+    student: false,
+    countries: [...new Set(users.map(user => user.campus))]
   }
 
   filterNames = (arr, query) => {
@@ -20,6 +21,10 @@ class App extends React.Component {
     return users
   }
 
+  filterOptions = (campus) => {
+    return users.filter(user => user.campus === campus);
+  }
+
   handleChange = (event) => {
     this.setState(state => ({
       query: event.target.value,
@@ -27,7 +32,15 @@ class App extends React.Component {
     }))
   }
 
+  optionsChange = (event) => {
+    const campus = event.target.value
+    this.setState(state => ({
+      data: this.filterOptions(campus)
+    }))
+  }
+
   filterCheckbox = (event) => {
+    console.log(this.state.countries)
     const name = event.target.name;
     const checked = event.target.checked;
     this.setState(state => ({
@@ -48,6 +61,11 @@ class App extends React.Component {
           {item.linkedin && <a href={item.linkedin}><img style={{ width: '20px' }} src={logo} alt="" /></a>}
           </td>
         </tr>
+      )
+    })
+    const countries = this.state.countries.map(country => {
+      return (
+          <option key={ country } value={ country }>{ country }</option>
       )
     })
     return (
@@ -76,6 +94,11 @@ class App extends React.Component {
             checked={this.state.student}
             onChange={this.filterCheckbox}
           />
+          <select name="country" id="country" onChange={this.optionsChange}>
+  <option value="country">country</option>
+  { countries }
+
+          </select>
           <table>
             <thead>
                 <tr>
